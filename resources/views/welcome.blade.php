@@ -96,5 +96,10 @@
                 </div>
             </div>
         </div>
+
+<form method="POST" action="/profile">
+    @call
+    ....
+</form>
     </body>
 </html>

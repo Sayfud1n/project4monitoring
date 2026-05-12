@@ -11,16 +11,17 @@ class User extends Authenticatable
     use Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * Atribut yang dapat diisi melalui mass assignment.
+     * Sudah menyertakan 'username' sesuai panduan Acara 11.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'username', 'email', 'password',
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * Atribut yang harus disembunyikan saat serialisasi array/JSON.
      *
      * @var array
      */
@@ -29,7 +30,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast to native types.
+     * Atribut yang harus dikonversi ke tipe data asli (casting).
      *
      * @var array
      */
