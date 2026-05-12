@@ -1,33 +1,26 @@
 FROM php:8.1-apache
 
-# Instal dependensi sistem
+# Instal dependensi dasar saja
 RUN apt-get update && apt-get install -z \
     libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
     zip \
     unzip \
-    git \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql
+    && docker-php-ext-install pdo pdo_mysql gd
 
 # Aktifkan mod_rewrite Apache
 RUN a2enmod rewrite
 
-# Copy semua file proyek ke folder web Apache
+# Copy semua file proyek
 COPY . /var/www/html
 
-# Set working directory
-WORKDIR /var/www/html
-
-# Instal Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN composer install --no-dev --optimize-autoloader
-
-# Set permissions untuk Laravel
+# Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Sesuaikan DocumentRoot Apache ke folder public
+# Sesuaikan DocumentRoot ke public
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
+
+# Instal Composer secara manual
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN composer install --no-dev --optimize-autoloader
 
 EXPOSE 80
